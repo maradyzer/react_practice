@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
-import React, { useState } from 'react';
+import React from 'react';
 import './App.scss';
 import cn from 'classnames';
 
@@ -11,15 +11,15 @@ const MALE = 'm';
 const FEMALE = 'f';
 
 const products = productsFromServer.map(product => {
-  const category = categoriesFromServer.find(
+  const categories = categoriesFromServer.find(
     category => category.id === product.categoryId,
   );
-  const user = usersFromServer.find(user => user.id === category.ownerId);
+  const users = usersFromServer.find(user => user.id === categories.ownerId);
 
   return {
     ...product,
-    category,
-    user,
+    categories,
+    users,
   };
 });
 
@@ -186,17 +186,17 @@ export const App = () => (
 
                 <td data-cy="ProductName">{product.name}</td>
                 <td data-cy="ProductCategory">
-                  {product.category.icon} - {product.category.title}
+                  {product.categories.icon} - {product.categories.title}
                 </td>
 
                 <td
                   data-cy="ProductUser"
                   className={cn({
-                    'has-text-link': product.user.sex === MALE,
-                    'has-text-danger': product.user.sex === FEMALE,
+                    'has-text-link': product.users.sex === MALE,
+                    'has-text-danger': product.users.sex === FEMALE,
                   })}
                 >
-                  {product.user.name}
+                  {product.users.name}
                 </td>
               </tr>
             ))}
