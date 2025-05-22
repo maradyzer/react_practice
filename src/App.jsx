@@ -33,6 +33,11 @@ export const App = () => {
   const handleQuery = event => setQuery(event.target.value);
   const clearQuery = () => setQuery('');
 
+  const resetFilters = () => {
+    setSelectedUserId(null);
+    setQuery('');
+  };
+
   let filteredProducts = products;
 
   if (selectedUserId) {
@@ -148,6 +153,7 @@ export const App = () => {
                 data-cy="ResetAllButton"
                 href="#/"
                 className="button is-link is-outlined is-fullwidth"
+                onClick={() => resetFilters()}
               >
                 Reset all filters
               </a>
@@ -156,9 +162,11 @@ export const App = () => {
         </div>
 
         <div className="box table-container">
-          <p data-cy="NoMatchingMessage">
-            No products matching selected criteria
-          </p>
+          {filteredProducts.length === 0 && (
+            <p data-cy="NoMatchingMessage">
+              No products matching selected criteria
+            </p>
+          )}
 
           <table
             data-cy="ProductTable"
