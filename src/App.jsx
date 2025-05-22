@@ -29,9 +29,26 @@ export const App = () => {
     setSelectedUserId(userId);
   };
 
-  const filteredProducts = selectedUserId
-    ? products.filter(product => product.users.id === selectedUserId)
-    : products;
+  const [query, setQuery] = useState('');
+  const handleQuery = event => setQuery(event.target.value);
+  const clearQuery = () => setQuery('');
+
+  let filteredProducts = products;
+
+  if (selectedUserId) {
+    filteredProducts = filteredProducts.filter(
+      product => product.users.id === selectedUserId,
+    );
+  }
+
+  if (query) {
+    filteredProducts = filteredProducts.filter(product => {
+      return product.name
+        .trim()
+        .toLowerCase()
+        .includes(query.trim().toLowerCase());
+    });
+  }
 
   return (
     <div className="section">
@@ -72,7 +89,8 @@ export const App = () => {
                   type="text"
                   className="input"
                   placeholder="Search"
-                  value="qwe"
+                  value={query}
+                  onChange={handleQuery}
                 />
 
                 <span className="icon is-left">
@@ -80,12 +98,14 @@ export const App = () => {
                 </span>
 
                 <span className="icon is-right">
-                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                  <button
-                    data-cy="ClearButton"
-                    type="button"
-                    className="delete"
-                  />
+                  {query && (
+                    <button
+                      data-cy="ClearButton"
+                      type="button"
+                      className="delete"
+                      onClick={() => clearQuery('')}
+                    />
+                  )}
                 </span>
               </p>
             </div>
